@@ -22,13 +22,13 @@ namespace Serf {
     }
 
     void tcpConnection::Post(const std::string &message) {
-        bool queueIdle = _outgoingMessages.empty();
+      //  bool queueIdle = _outgoingMessages.empty();
         // добавляем наше сообщение 
-        _outgoingMessages.push(message);
+       // _outgoingMessages.push(message);
         LOGGING_SOURCES(normal, "Добавили наше сообшение в очередь.");
-        if (queueIdle) {
-            asyncWrite();
-        }
+        //if (queueIdle) {
+            asyncWrite(message);
+      //  }
     }
 
     void tcpConnection::asyncRead() {
@@ -61,10 +61,10 @@ namespace Serf {
         asyncRead();
     }
 
-    void tcpConnection::asyncWrite() {
+    void tcpConnection::asyncWrite(const std::string &message) {
         LOGGING_SOURCES(normal, "Записываем сообщение.");
         // Записываем наше сообщение в буфер для отправки клиенту front() сколько байт
-        io::async_write(_socket, io::buffer(_outgoingMessages.front()), 
+        io::async_write(_socket, io::buffer(message), 
                         // через лямду записываем наше сообщение 
                         [self = shared_from_this()](boost::system::error_code ec, size_t bytesTransferred) {
                             LOGGING_SOURCES(normal, "Записываем в _socket.");
@@ -81,11 +81,11 @@ namespace Serf {
             return;
         }
         LOGGING_SOURCES(normal, "Удаление из стека.");  
-        _outgoingMessages.pop();
+       // _outgoingMessages.pop();
           
-        if (!_outgoingMessages.empty()) {
-            asyncWrite();
-        }
+       // if (!_outgoingMessages.empty()) {
+       //     asyncWrite();
+       // }
     }
 
 }
