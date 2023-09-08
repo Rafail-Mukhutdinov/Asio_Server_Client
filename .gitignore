@@ -3,3 +3,6 @@ Server/Server
 Client/build/
 Server/build/
 build/
+build-Client-Debug/
+build-Server-Debug/
+*.user
