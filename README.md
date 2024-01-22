@@ -1,25 +1,23 @@
 # Asio_Server_Client
 
-* Писал код на ОС Linux Centos 9 stream
-* Собираю проекты через Cmake
-* Требуется установка библиотеки Boost от 1.80 версия
-* Код использует асинхронную передачу данных по протоколу TCP/IP
-
-
+* Wrote code on OS Linux Centos 9 stream
+* Building projects through Cmake
+* Requires installation of Boost library from version 1.80
+* The code uses asynchronous data transfer via the TCP/IP protocol
 
 ## Server:
-* Сервер может принимать неограниченное количество клиентов 
-* Каждому клиенту присваивается ID и сохраняется в стек если клиент ушел он удаляется из стека 
-* Сервер обрабатывает входящие сообщения в формате json `{"formula":"5+7/3-7"}` и после расчетов он формирует его обратно в формат json `{"summa":"0"}`
-* На сервере обрабатываю математические операции если происходит деление на ноль эту операцию я исключаю пример 2+2/0 выводит результат 2 (2/0) исключается
-* Использую стек для приоритета математических операций 
-* Логирование обрабатывается макросом глобальным в вывод лога добавил параметр, название функции, название файла, номер строки, и сообщение 
-
+* The server can accept an unlimited number of clients
+* Each client is assigned an ID and saved in the stack if the client left it is removed from the stack
+* The server processes incoming messages in json format `{"formula":"5+7/3-7"}` and after calculations, it forms it back into json format `{"summa":"0"}`
+* On the server, I process mathematical operations if division by zero occurs this operation I exclude for example 2+2/0 outputs the result 2 (2/0) is excluded
+* I use a stack for the priority of mathematical operations
+* Logging is handled by a global macro in the log output I added a parameter, function name, file name, line number, and message
 
 ## Client
-*  Клиент использует многопоточность для получение данных от сервера
-*  Все тоже самое что и сервер только нет расчета формул
-*  Выход из клиента ввод в консоль
+* The client uses multithreading to receive data from the server
+* Everything is the same as the server only there is no calculation of formulas
+* Exit from the client input to the console
+
 
 
   
