@@ -1,3 +1,5 @@
+[![CMake on multiple platforms](https://github.com/Rafail-Mukhutdinov/Asio_Server_Client/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/Rafail-Mukhutdinov/Asio_Server_Client/actions/workflows/cmake-multi-platform.yml)
+
 # Asio_Server_Client
 
 * Wrote code on OS Linux Centos 9 stream
