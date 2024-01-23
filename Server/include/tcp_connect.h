@@ -32,17 +32,17 @@ class tcpConnection : public std::enable_shared_from_this<tcpConnection> {
         explicit tcpConnection(io::ip::tcp::socket&& socket);
 
         
-        void asyncRead();        
+        void asyncRead();
         void onRead(boost::system::error_code ec, size_t bytesTranferred);
 
-        void asyncWrite(const std::string& message);
+        void asyncWrite();
         void onWrite(boost::system::error_code ec, size_t bytesTransferred);
 
     private:
         tcp::socket _socket;
         std::string _username;
 
-       // std::queue<std::string> _outgoingMessages;
+        std::queue<std::string> _outgoingMessages;
         io::streambuf _streamBuf {65536};
 
         MessageHandler _messageHandler;

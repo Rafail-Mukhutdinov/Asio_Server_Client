@@ -1,16 +1,39 @@
+# CMakeLists.txt
+cmake_minimum_required(VERSION 3.27)
+project(Template_Boost_Test)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.26)
-project(ServerClient)
+# Подключите Boost
+# asio regex algorithm date_time filesystem system program_options json thread
+set(BOOST_INCLUDE_LIBRARIES log log_setup asio regex algorithm date_time filesystem system program_options json thread ) # Укажите нужные вам компоненты Boost
+set(BOOST_ENABLE_CMAKE ON)
+include(FetchContent)
+FetchContent_Declare(
+  Boost
+  URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.7z # Укажите нужную вам версию Boost
+)
+FetchContent_MakeAvailable(Boost)
 
-set(CMAKE_CXX_STANDARD 20)
+# Подключите Google Test
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
+)
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-DBOOST_LOG_DYN_LINK -lboost_log_setup -lboost_log -lboost_thread -lpthread -lboost_system -lboost_filesystem")
-#SET(GCC_COVERAGE_LINK_FLAGS    "-lgcov")
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
-#add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+# Включите тестирование
+enable_testing()
 
-#SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-#SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
-
+# Добавьте ваши директории
 add_subdirectory(Client)
 add_subdirectory(Server)
+#add_subdirectory(Project_2)
+#add_subdirectory(Project_3_Qt)
+#add_subdirectory(Google_Test)
+
+# Включите Google Test
+include(GoogleTest)
+
