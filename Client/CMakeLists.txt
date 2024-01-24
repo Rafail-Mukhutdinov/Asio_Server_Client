@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 project(client)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 
 set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
