@@ -39,7 +39,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        vcpkg install boost-asio boost-regex boost-algorithm boost-json boost-log boost-property_tree
+          vcpkg install boost-asio boost-regex boost-algorithm boost-json boost-log boost-property_tree --triplet x64-windows-static
+
 
     - name: Set reusable strings
       id: strings
