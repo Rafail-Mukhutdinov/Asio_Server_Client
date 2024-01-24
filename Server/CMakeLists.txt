@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.26)
+
 project(server)
 
 set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
