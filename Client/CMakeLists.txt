@@ -19,4 +19,4 @@ add_executable(client   client.cpp
                         include/logging.h)
 
 #target_link_libraries(client PRIVATE Qt6::Widgets  ${Boost_LOG_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} wsock32 ws2_32)
-target_link_libraries(client Boost::asio Boost::regex Boost::algorithm Boost::json Boost::log Boost::log_setup Boost::property_tree gtest_main)
+target_link_libraries(client Boost::asio Boost::regex Boost::algorithm Boost::json Boost::log  Boost::property_tree gtest_main)

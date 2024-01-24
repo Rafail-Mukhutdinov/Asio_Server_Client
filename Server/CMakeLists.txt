@@ -22,4 +22,4 @@ ADD_EXECUTABLE(${PROJECT_NAME} server.cpp
                       tcp_server.cpp)
 
 
-target_link_libraries(server Boost::asio Boost::regex Boost::algorithm Boost::json Boost::log Boost::log_setup Boost::property_tree gtest_main)
+target_link_libraries(server Boost::asio Boost::regex Boost::algorithm Boost::json Boost::log  Boost::property_tree gtest_main)

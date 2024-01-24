@@ -4,7 +4,7 @@ project(Template_Boost_Test)
 set(CMAKE_CXX_STANDARD 17)
 # Подключите Boost
 # asio regex algorithm date_time filesystem system program_options json thread
-set(BOOST_INCLUDE_LIBRARIES log log_setup asio regex algorithm date_time filesystem system program_options json thread ) # Укажите нужные вам компоненты Boost
+set(BOOST_INCLUDE_LIBRARIES log asio regex algorithm date_time filesystem system program_options json thread ) # Укажите нужные вам компоненты Boost
 set(BOOST_ENABLE_CMAKE ON)
 include(FetchContent)
 FetchContent_Declare(
