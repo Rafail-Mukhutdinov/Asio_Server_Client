@@ -1,5 +1,8 @@
+cmake_minimum_required(VERSION 3.26)
 
 project(server)
+
+set(CMAKE_CXX_STANDARD 20)
 
 set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
 set(Boost_USE_DEBUG_LIBS        OFF)  # ignore debug libs and
