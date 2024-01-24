@@ -6,3 +6,4 @@ build/
 build-Client-Debug/
 build-Server-Debug/
 *.user
+.vscode/

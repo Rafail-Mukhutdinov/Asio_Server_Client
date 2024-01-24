@@ -1,10 +1,6 @@
 #pragma once
 #include <iostream>
 
-
-
-
-
 namespace Serf
 {
     class jsonparser
