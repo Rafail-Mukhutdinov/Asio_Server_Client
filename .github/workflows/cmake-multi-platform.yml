@@ -58,11 +58,14 @@ jobs:
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }}
-
-    - name: Run Tests
       run: |
-        cd build/Google_Test
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
           ./MyTests.exe
+        else
+          ctest --build-config ${{ matrix.build_type }}
+        fi
+    
+
+
   
        
