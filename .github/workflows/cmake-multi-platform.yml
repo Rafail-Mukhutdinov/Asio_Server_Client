@@ -62,9 +62,6 @@ jobs:
 
     - name: Run Tests
       run: |
-        cd build/Google_Test
-        if (WIN32)
-          MyTests.exe
-        else ()
+        cd build/Google_Test    
           ./MyTests
-        endif ()
+       
