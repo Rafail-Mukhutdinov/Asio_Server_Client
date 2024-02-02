@@ -62,7 +62,7 @@ jobs:
 
     - name: Run Tests
       run: |
-        cd build/Google_Test/Release/
+        cd build/Google_Test
           MyTests.exe
   
        
