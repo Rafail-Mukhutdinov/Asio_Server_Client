@@ -58,13 +58,20 @@ jobs:
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      shell: pwsh
       run: |
-        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+        if ("${{ matrix.os }}" -eq "windows-latest") {
           ./MyTests.exe
-        else
-          cd build/Google_Test
-            ./MyTests 
-        fi
+        } else {
+          ./MyTests
+        }
+    
+
+
+
+
+
+
     
 
 
