@@ -57,14 +57,16 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
     - name: Test
-      working-directory: ${{ github.workspace }}/build/Google_Test
       shell: pwsh
       run: |
         if ("${{ matrix.os }}" -eq "windows-latest") {         
-            MyTests.exe
+            cd ${{ github.workspace }}/build/Google_Test/Release
+            ./MyTests.exe
         } else {          
+            cd ${{ github.workspace }}/build/Google_Test
             ./MyTests
         }
+    
     
     
 
