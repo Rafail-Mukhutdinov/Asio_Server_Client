@@ -60,8 +60,5 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: ctest --build-config ${{ matrix.build_type }}
 
-    - name: Run Tests
-      run: |
-        cd build/Google_Test    
-          ./MyTests
+
        
