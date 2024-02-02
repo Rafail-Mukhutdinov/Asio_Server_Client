@@ -61,8 +61,10 @@ jobs:
       shell: pwsh
       run: |
         if ("${{ matrix.os }}" -eq "windows-latest") {
-          ./MyTests.exe
+          cd build/Google_Test
+          MyTests.exe
         } else {
+          cd build/Google_Test
           ./MyTests
         }
     
