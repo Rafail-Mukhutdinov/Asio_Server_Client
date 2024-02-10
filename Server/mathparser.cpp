@@ -1,4 +1,4 @@
-#include "include/logging.h"
+#include "../lib/logging.h"
 #include "include/mathparser.h"
 
 namespace Serf

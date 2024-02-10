@@ -12,15 +12,15 @@ set(Boost_NO_WARN_NEW_VERSIONS  ON)
 #add_definitions(-D_WIN32_WINNT=0x0601)  # Add this line
 
 ADD_EXECUTABLE(server   server.cpp
-                        jsonparser.cpp
+                        ../lib/jsonparser.cpp
                         mathparser.cpp
                         tcp_connect.cpp
                         tcp_server.cpp
-                        include/jsonparser.h
+                        ../lib/jsonparser.h
                         include/mathparser.h
                         include/tcp_connect.h
                         include/tcp_server.h
-                        include/logging.h)
+                        ../lib/logging.h)
 
 if(WIN32)
     #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lws2_32")

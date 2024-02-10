@@ -11,11 +11,11 @@ set(Boost_NO_WARN_NEW_VERSIONS  ON)
 #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lws2_32")
 
 add_executable(client   client.cpp
-                        jsonparser.cpp
+                        ../lib/jsonparser.cpp
                         tcp_client.cpp
-                        include/jsonparser.h
+                        ../lib/jsonparser.h
                         include/tcp_client.h
-                        include/logging.h)
+                        ../lib/logging.h)
 
 #target_link_libraries(client PRIVATE Qt6::Widgets  ${Boost_LOG_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} wsock32 ws2_32)
 if(WIN32)

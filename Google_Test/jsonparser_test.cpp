@@ -1,4 +1,4 @@
-#include "../Server/include/jsonparser.h"
+#include "../lib/jsonparser.h"
 #include "gtest/gtest.h"
 
 // создаем тестовый класс, унаследованный от ::testing::Test
