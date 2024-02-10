@@ -1,4 +1,4 @@
-#include "include/logging.h"
+#include "logging.h"
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include "include/jsonparser.h"
+#include "jsonparser.h"
 
 using namespace boost::json;
  namespace Serf
