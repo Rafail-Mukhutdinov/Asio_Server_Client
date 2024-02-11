@@ -29,6 +29,12 @@ namespace Serf {
 
         int Run();
         void Broadcast(const std::string& message);
+
+        std::string ParseMessage(const std::string& message);
+
+        double EvaluateFormula(const std::string& formula); 
+        std::string PrepareMessage(double result);
+        void SendMessageToClients(const std::string& message);
         
     private:
         void startAccept();
