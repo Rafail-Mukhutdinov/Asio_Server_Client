@@ -36,29 +36,14 @@ using namespace boost::json;
     }
 
     void jsonparser::StringSorting(const std::string &message)
-    {     
-        id = ""; 
-        json = "";        
-        int counter = 0;
-        bool flag = true;
-        for (auto const &item : message)
-        {
-            if(flag){    
-                if (item == ':'){ 
-                    if(counter > 0){
-                        flag = false;
-                    }else{
-                    id += item;
-                    counter++;
-                    }
-                }else{
-                id += item;   
-                } 
-            } else{
-                if(item !=' ') json += item;
-            }      
-        }
-        LOGGING_SOURCES(normal, "Распарсил текст на IDname: " + id + " и json: " + json);  
+    {
+        id.reserve(message.size());
+        json.reserve(message.size());
+        size_t pos1 = message.find(':');
+        size_t pos2 = message.find(':', pos1 + 1); // добавил третий параметр
+        id = message.substr(0, pos2);
+        json = message.substr(pos2 + 1 + 1); // добавил + 1
+        LOGGING_SOURCES(normal, "Распарсил текст на IDname: " + id + " и json: " + json);
     }
 
     

@@ -71,12 +71,15 @@ std::string tcpServer::PrepareMessage(double result) {
     return pars.GetId() + ": " + pars.TranslateTextJson(outkey, resultStr) + "\n";
 }
 
-// Метод для отправки сообщения каждому клиенту
 void tcpServer::SendMessageToClients(const std::string& message) {
-    for (auto& connection : _connections) {
-        if (pars.GetId() == connection->GetUsername()) {
-            connection->Post(message);
-        }
+    auto username = pars.GetId();
+    auto connection = std::find_if(_connections.begin(), _connections.end(), 
+        [username](const std::shared_ptr<tcpConnection>& conn) {
+            return username == conn->GetUsername();
+        });
+
+    if (connection != _connections.end()) {
+        (*connection)->Post(message);
     }
 }
 
