@@ -1,104 +1,126 @@
 #include "../lib/logging.h"
 #include "include/tcp_server.h"
 
-
-
-
 #include <iostream>
 
-namespace Serf
-{
+namespace Serf {
     using boost::asio::ip::tcp;
-    tcpServer::tcpServer(IPV ipv, int port) : _ipVersion(ipv), _port(port),
-                                              _acceptor(_ioContext, tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(), _port))
-    {
+
+    // Конструктор класса tcpServer
+    tcpServer::tcpServer(const IPV ipv, const int port) 
+        : _ipVersion(ipv), _port(port),
+          _acceptor(_ioContext, tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(), _port)) {
         LOGGING_SOURCES(normal, "Конструктор класса tcpServer");
-        
     }
 
-    int tcpServer::Run()
-    {
+    // Метод запуска сервера
+    int tcpServer::Run() {
         LOGGING_SOURCES(normal, "Запуск");
-        try
-        {
-            
-            startAccept();
-            _ioContext.run();
+        try {
+            startAccept(); // Начинаем принимать соединения
+            _ioContext.run(); // Запускаем цикл обработки событий ввода-вывода
+        } catch (const std::exception& e) {
+            LOGGING_SOURCES(error, "Ошибка: " + std::string(e.what()));
+            std::cerr << e.what() << std::endl; // Выводим информацию об ошибке в консоль
+            return -1; // Возвращаем код ошибки
         }
-        catch (std::exception &e)
-        {
-            LOGGING_SOURCES(error, "Ошибка: ");
-            std::cerr << e.what() << std::endl;
-            return -1;
-        }
-        return 0;
-    }
-    // Работаем стекстом 
-    void tcpServer::Broadcast(const std::string &message)
-    {
-        
-        std::string inkey = "formula"; 
-        std::string outkey = "summa";    
-        pars.StringSorting(message);
-        LOGGING_SOURCES(normal, "Распарcим наше сообщение.");        
-        std::string stringformula = pars.TranslateJsonText(inkey, pars.GetJson());
-        LOGGING_SOURCES(normal, "Формула: " + stringformula);
-        auto sumformula = math.Parse(stringformula.begin(), stringformula.end());        
-        std::string change = std::to_string(sumformula->Evaluate());
-        LOGGING_SOURCES(normal, "Сумма : " + change);
-        std::string finish = pars.GetId()+": " + pars.TranslateTextJson(outkey,change)+ "\n";
-        LOGGING_SOURCES(normal, "Подготовили сообщение для отправки клиенту : " + finish);
-        
-        for (auto &connection : _connections)
-        {
-            if (pars.GetId() == connection->GetUsername())
-                connection->Post(finish);
-        }
+        return 0; // Возвращаем успешный код завершения
     }
 
-    void tcpServer::startAccept()
-    {
-        LOGGING_SOURCES(normal, "Старт рекурсия прослушивание.");
+// Метод для отправки сообщения всем клиентам
+void tcpServer::Broadcast(const std::string& message) {
+    // Сортируем и парсим сообщение
+    std::string parsedMessage = ParseMessage(message);
+
+    // Получаем результат из формулы
+    double result = EvaluateFormula(parsedMessage);
+
+    // Подготавливаем сообщение для отправки
+    std::string preparedMessage = PrepareMessage(result);
+
+    // Отправляем сообщение каждому клиенту
+    SendMessageToClients(preparedMessage);
+}
+
+// Метод для сортировки и парсинга сообщения
+std::string tcpServer::ParseMessage(const std::string& message) {
+    pars.StringSorting(message);
+    LOGGING_SOURCES(normal, "Распарсили наше сообщение.");
+
+    const std::string inkey = "formula";
+    return pars.TranslateJsonText(inkey, pars.GetJson());
+}
+
+// Метод для вычисления результата формулы
+double tcpServer::EvaluateFormula(const std::string& formula) {
+    auto it = formula.begin();
+    auto sumformula = math.Parse(it, formula.end());
+    return sumformula->Evaluate();
+}
+
+// Метод для подготовки сообщения для отправки
+std::string tcpServer::PrepareMessage(double result) {
+    std::string resultStr = std::to_string(result);
+    if (result == static_cast<int>(result)) {
+        resultStr = resultStr.substr(0, resultStr.find('.'));
+    }
+
+    LOGGING_SOURCES(normal, "Сумма : " + resultStr);
+
+    const std::string outkey = "summa";
+    return pars.GetId() + ": " + pars.TranslateTextJson(outkey, resultStr) + "\n";
+}
+
+// Метод для отправки сообщения каждому клиенту
+void tcpServer::SendMessageToClients(const std::string& message) {
+    for (auto& connection : _connections) {
+        if (pars.GetId() == connection->GetUsername()) {
+            connection->Post(message);
+        }
+    }
+}
+
+
+    // Метод для начала принятия новых соединений
+    void tcpServer::startAccept() {
+        LOGGING_SOURCES(normal, "Старт рекурсивного прослушивания.");
         _socket.emplace(_ioContext);
 
-        // асинхронно ждем соединения клиента
-        _acceptor.async_accept(*_socket, [this](const boost::system::error_code &error)
-                               {
-                                            LOGGING_SOURCES(normal, "Если новое подключение добавляем клиента в коллекцию.");
-                                            // создаем нового клиента 
-                                            auto connection = tcpConnection::Create(std::move(*_socket));
-            
+        // Асинхронно принимаем новые соединения
+        _acceptor.async_accept(*_socket, [this](const boost::system::error_code& error) {
+            LOGGING_SOURCES(normal, "Если новое подключение, добавляем клиента в коллекцию.");
+            if (!error) {
+                auto connection = tcpConnection::Create(std::move(*_socket)); // Создаем новое соединение
 
-        if (OnJoin) {
-            LOGGING_SOURCES(normal, "Указатель на функцию, Если новый пользователь.");
-            OnJoin(connection);
-        }
-        // Добавляем нашего пользователя
-        _connections.insert(connection);
-        if (!error) {
-            auto massHandler = [this](const std::string& message) { 
-                                    
-                                    if (OnClientMessage) {
-                                        LOGGING_SOURCES(normal, "Указатель на функцию обработка текста.");
-                                        OnClientMessage(message); 
-                                        }                                   
-                                };
+                if (OnJoin) { // Если установлена функция обработки присоединения клиента
+                    LOGGING_SOURCES(normal, "Вызов функции обработки нового пользователя.");
+                    OnJoin(connection); // Вызываем эту функцию
+                }
 
-            auto errorhandler = [&, weak =std::weak_ptr(connection)] {
-                                        
-                                        if (auto shared = weak.lock(); shared && _connections.erase(shared)) {
-                                            if (OnLeave) 
-                                            {
-                                                LOGGING_SOURCES(normal, "Указатель на функцию, Если пользователь покинул сервер.");
-                                                OnLeave(shared);
-                                            }
-                                        }
-                                };                   
-            connection->Start(massHandler, errorhandler);
-        }
+                _connections.insert(connection); // Добавляем новое соединение в коллекцию клиентов
 
-        startAccept(); });
+                // Обработчик сообщений от клиента
+                auto massHandler = [this](const std::string& message) {
+                    if (OnClientMessage) { // Если установлена функция обработки сообщений от клиента
+                        LOGGING_SOURCES(normal, "Вызов функции обработки текста клиентом.");
+                        OnClientMessage(message); // Вызываем эту функцию
+                    }
+                };
+
+                // Обработчик ошибок при соединении с клиентом
+                auto errorhandler = [&, weak = std::weak_ptr(connection)]() {
+                    if (auto shared = weak.lock(); shared && _connections.erase(shared)) {
+                        if (OnLeave) { // Если установлена функция обработки отключения клиента
+                            LOGGING_SOURCES(normal, "Вызов функции при выходе пользователя.");
+                            OnLeave(shared); // Вызываем эту функцию
+                        }
+                    }
+                };
+
+                connection->Start(massHandler, errorhandler); // Начинаем обработку сообщений от клиента
+            }
+
+            startAccept(); // Начинаем принимать новые соединения снова
+        });
     }
-
-
 }
